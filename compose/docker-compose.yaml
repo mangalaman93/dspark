@@ -149,3 +149,13 @@ services:
             - master-mesos1
             - master-mesos2
             - master-mesos3
+
+    shuffle:
+        image: mangalaman93/shuffle:2.1.0
+        restart: always
+        container_name: shuffle
+        network_mode: host
+        environment:
+            MESOS_MASTER: zk://$HOST_IP:2181,$HOST_IP:2182,$HOST_IP:2183/mesos
+        volumes:
+            - /opt/run/shuffle:/opt/spark/tmp

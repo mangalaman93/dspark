@@ -42,3 +42,110 @@ services:
         volumes:
             - /opt/log/zookeeper3:/datalog
             - /opt/run/zookeeper3:/data
+
+    master-mesos1:
+        image: mangalaman93/mesos:latest
+        command: mesos-master --no-hostname_lookup
+        restart: always
+        container_name: master-mesos1
+        hostname: master-mesos1
+        ports:
+            - 5051:5051
+        environment:
+            MESOS_PORT: 5051
+            MESOS_ADVERTISE_PORT: 5051
+            MESOS_ADVERTISE_IP: $HOST_IP
+            MESOS_ZK: zk://$HOST_IP:2181,$HOST_IP:2182,$HOST_IP:2183/mesos
+            MESOS_QUORUM: 2
+            MESOS_REGISTRY: in_memory
+            MESOS_LOG_DIR: /var/log/mesos
+            MESOS_WORK_DIR: /var/run/mesos
+        volumes:
+            - /opt/log/master-mesos1:/var/log/mesos
+            - /opt/run/master-mesos1:/var/run/mesos
+        depends_on:
+            - zookeeper1
+            - zookeeper2
+            - zookeeper3
+
+    master-mesos2:
+        image: mangalaman93/mesos:latest
+        command: mesos-master --no-hostname_lookup
+        restart: always
+        container_name: master-mesos2
+        hostname: master-mesos2
+        ports:
+            - 5052:5052
+        environment:
+            MESOS_PORT: 5052
+            MESOS_ADVERTISE_IP: $HOST_IP
+            MESOS_ADVERTISE_PORT: 5052
+            MESOS_ZK: zk://$HOST_IP:2181,$HOST_IP:2182,$HOST_IP:2183/mesos
+            MESOS_QUORUM: 2
+            MESOS_REGISTRY: in_memory
+            MESOS_LOG_DIR: /var/log/mesos
+            MESOS_WORK_DIR: /var/run/mesos
+        volumes:
+            - /opt/log/master-mesos2:/var/log/mesos
+            - /opt/run/master-mesos2:/var/run/mesos
+        depends_on:
+            - zookeeper1
+            - zookeeper2
+            - zookeeper3
+
+    master-mesos3:
+        image: mangalaman93/mesos:latest
+        command: mesos-master --no-hostname_lookup
+        restart: always
+        container_name: master-mesos3
+        hostname: master-mesos3
+        ports:
+            - 5053:5053
+        environment:
+            MESOS_PORT: 5053
+            MESOS_ADVERTISE_IP: $HOST_IP
+            MESOS_ADVERTISE_PORT: 5053
+            MESOS_ZK: zk://$HOST_IP:2181,$HOST_IP:2182,$HOST_IP:2183/mesos
+            MESOS_QUORUM: 2
+            MESOS_REGISTRY: in_memory
+            MESOS_LOG_DIR: /var/log/mesos
+            MESOS_WORK_DIR: /var/run/mesos
+        volumes:
+            - /opt/log/master-mesos3:/var/log/mesos
+            - /opt/run/master-mesos3:/var/run/mesos
+        depends_on:
+            - zookeeper1
+            - zookeeper2
+            - zookeeper3
+
+    slave-mesos:
+        image: mangalaman93/mesos:latest
+        command: mesos-slave --launcher=posix --no-hostname_lookup
+        privileged: true
+        restart: always
+        container_name: slave-mesos
+        network_mode: host
+        environment:
+            MESOS_PORT: 5050
+            MESOS_ADVERTISE_IP: $HOST_IP
+            MESOS_IP: $HOST_IP
+            MESOS_MASTER: zk://$HOST_IP:2181,$HOST_IP:2182,$HOST_IP:2183/mesos
+            MESOS_SWITCH_USER: 0
+            MESOS_CONTAINERIZERS: docker
+            MESOS_LOG_DIR: /var/log/mesos
+            MESOS_WORK_DIR: /var/run/mesos
+            LD_LIBRARY_PATH: /usr/lib64
+        volumes:
+            - /opt/log/slave-mesos:/var/log/mesos
+            - /opt/run/slave-mesos:/var/run/mesos
+            - /var/run/docker.sock:/var/run/docker.sock
+            - /cgroup:/cgroup:ro
+            - /sys:/sys:ro
+            - /usr/bin/docker:/usr/local/bin/docker:ro
+        depends_on:
+            - zookeeper1
+            - zookeeper2
+            - zookeeper3
+            - master-mesos1
+            - master-mesos2
+            - master-mesos3

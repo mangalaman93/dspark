@@ -159,3 +159,41 @@ services:
             MESOS_MASTER: zk://$HOST_IP:2181,$HOST_IP:2182,$HOST_IP:2183/mesos
         volumes:
             - /opt/run/shuffle:/opt/spark/tmp
+
+    namenode:
+        image: mangalaman93/hdfs:2.7.3
+        command: hdfs --config /etc/hadoop namenode
+        restart: always
+        container_name: namenode
+        hostname: namenode
+        network_mode: host
+        environment:
+            CORE_CONF_fs_defaultFS: hdfs://$HOST_IP:9000
+            HDFS_CONF_dfs_namenode_name_dir: /hadoop/dfs/name
+            HDFS_CONF_dfs_namenode_http___address: $HOST_IP:50070
+            HDFS_CONF_dfs_namenode_rpc___address: $HOST_IP:9000
+            HDFS_CONF_dfs_namenode_datanode_registration_ip___hostname___check: "false"
+            CLUSTER_NAME: cluster_hdfs
+        volumes:
+            - /opt/run/namenode:/hadoop/dfs/name
+            - /opt/log/namenode:/opt/hadoop/logs
+
+    datanode:
+        image: mangalaman93/hdfs:2.7.3
+        command: hdfs --config /etc/hadoop datanode
+        restart: always
+        container_name: datanode
+        network_mode: host
+        environment:
+            CORE_CONF_fs_defaultFS: hdfs://$HOST_IP:9000
+            CORE_CONF_hadoop_http_staticuser_user: hadoop
+            HDFS_CONF_dfs_datanode_data_dir: /hadoop/dfs/data
+            HDFS_CONF_dfs_datanode_address: $HOST_IP:50010
+            HDFS_CONF_dfs_datanode_http_address: $HOST_IP:50075
+            HDFS_CONF_dfs_datanode_ipc_address: $HOST_IP:50020
+            CLUSTER_NAME: cluster_hdfs
+        volumes:
+            - /opt/run/datanode:/hadoop/dfs/data
+            - /opt/log/datanode:/opt/hadoop/logs
+        depends_on:
+            - namenode

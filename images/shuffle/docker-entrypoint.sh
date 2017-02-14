@@ -29,4 +29,3 @@ if [ "$1" = './bin/spark-class' ]; then
 fi
 
 exec gosu hadoop "$@"
-

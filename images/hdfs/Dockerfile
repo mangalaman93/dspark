@@ -77,4 +77,3 @@ RUN ln -s /opt/hadoop/etc/hadoop /etc/hadoop && \
 WORKDIR /home/hadoop
 ADD docker-entrypoint.sh /
 ENTRYPOINT ["/docker-entrypoint.sh"]
-

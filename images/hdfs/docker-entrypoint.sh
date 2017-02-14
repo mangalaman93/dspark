@@ -56,4 +56,3 @@ if [[ ! -z ${HDFS_CONF_dfs_datanode_data_dir} ]]; then
 fi
 
 exec gosu hadoop "$@"
-

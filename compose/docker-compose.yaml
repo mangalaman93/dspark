@@ -157,6 +157,7 @@ services:
         network_mode: host
         environment:
             MESOS_MASTER: zk://$HOST_IP:2181,$HOST_IP:2182,$HOST_IP:2183/mesos
+            SPARK_SHUFFLE_SERVICE_PORT: 7337
         volumes:
             - /opt/run/shuffle:/opt/spark/tmp
 

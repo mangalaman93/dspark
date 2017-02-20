@@ -12,3 +12,7 @@ textFile.map(line => line.split(" ").size).reduce((a, b) => if (a > b) a else b)
 * Avoid running `shuffle` service in the host network mode
 * Avoid running `namenode` and `datanode` services in the host network mode
 * Setup an HA cluster of HDFS with at least 3 datanodes
+
+# Issues/Enhancements
+* Hostname look up issue with mesos
+* Fix spark tmp directory as volume only when necessary

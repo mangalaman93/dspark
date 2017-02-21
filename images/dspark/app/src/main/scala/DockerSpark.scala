@@ -17,11 +17,12 @@ object DockerSpark {
     // reading listening port from the environment
     val port: Int = System.getenv("DSPARK_PORT").toInt
     val itf: String = System.getenv("DSPARK_LISTENING_IP")
+    val master: String = System.getenv("SPARK_MASTER")
 
     // Setup Spark configuration
     val conf = new SparkConf()
       .setAppName("dspark")
-      .setMaster("local[*]")
+      .setMaster(master)
 
     val eVars = System.getenv()
     for ((k: String, v: String) <- eVars) {

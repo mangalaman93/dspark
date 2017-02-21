@@ -11,7 +11,7 @@ textFile.map(line => line.split(" ").size).reduce((a, b) => if (a > b) a else b)
 # Run `dspark` example
 ## Run `dspark`
 ```
-docker run --net=compose_default --rm -it -p 4040:4040 -p 4042:4042 --name=dspark -e DSPARK_PORT=4042 -e DSPARK_LISTENING_IP=0.0.0.0 -e spark_mesos_executor_docker_image=mangalaman93/executor:2.1.0 -e spark_mesos_executor_home=/opt/spark -e spark_local_dir=/opt/spark/tmp -e spark_ui_port=4040 -e spark_mesos_executor_docker_volumes=/opt/run/tmp:/opt/spark/tmp mangalaman93/dspark:0.1.0
+docker run --net=compose_default --rm -it -p 4040:4040 -p 4042:4042 --name=dspark -e DSPARK_PORT=4042 -e DSPARK_LISTENING_IP=0.0.0.0 -e SPARK_MASTER=mesos://zk://$HOST_IP:2181,$HOST_IP:2182,$HOST_IP:2183/mesos -e spark_mesos_executor_docker_image=mangalaman93/executor:2.1.0 -e spark_mesos_executor_home=/opt/spark -e spark_local_dir=/opt/spark/tmp -e spark_ui_port=4040 -e spark_mesos_executor_docker_volumes=/opt/run/tmp:/opt/spark/tmp mangalaman93/dspark:0.1.0
 ```
 
 ## Add a file to HDFS

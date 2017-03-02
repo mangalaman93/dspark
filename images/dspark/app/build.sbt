@@ -11,6 +11,7 @@ libraryDependencies ++= Seq(
   "org.scala-lang" % "scala-reflect" % "2.11.8",
   "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.4",
   "org.scala-lang.modules" %% "scala-xml" % "1.0.4",
+  "org.apache.spark" %% "spark-mesos" % "2.1.0",
   "com.typesafe.akka" %% "akka-http-core" % "2.4.7",
   "com.typesafe.akka" %% "akka-http-experimental" % "2.4.7"
 )

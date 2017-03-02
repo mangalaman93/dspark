@@ -8,6 +8,11 @@ ENV JAVA_HOME=/usr/lib/jvm/jre
 # explicitly set user/group IDs
 RUN groupadd -r hadoop --gid=1000 && useradd -r -g hadoop -d /opt/dspark --uid=1000 hadoop
 
+# We need mesosphere libs for running spark with mesos
+RUN rpm -Uvh http://repos.mesosphere.com/el/7/noarch/RPMS/mesosphere-el-repo-7-1.noarch.rpm && \
+    yum -y install mesos && \
+    yum clean all
+
 # grab gosu for easy step-down from root
 ENV GOSU_VERSION 1.9
 RUN gpg --keyserver pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 \

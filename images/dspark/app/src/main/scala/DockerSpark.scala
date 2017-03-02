@@ -73,9 +73,9 @@ object DockerSpark {
         .map(word => (word, 1))
         .reduceByKey(_ + _)
       counts.saveAsTextFile(output_file)
-      String.format("Job output saved at %s", output_file)
+      String.format("Job output saved at %s\n", output_file)
     } catch {
-      case e: Throwable => String.format("Error occurred: %s", e)
+      case e: Throwable => String.format("Error occurred: %s\n", e)
     }
   }
 }

@@ -36,6 +36,8 @@ hdfs dfs -fs=hdfs://$HOST_IP:9000 -cat /outputfile/part-00000
 * Avoid running `shuffle` service in the host network mode
 * Avoid running `namenode` and `datanode` services in the host network mode
 * Setup an HA cluster of HDFS with at least 3 datanodes
+* Spark-submit etc.
+* Multinode setup
 
 # Issues/Enhancements
 * Hostname look up issue with mesos

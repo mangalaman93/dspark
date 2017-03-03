@@ -37,18 +37,5 @@ dspark:
 	cd $(IMAGES_DIR)/$@ && $(DOCKER) build -t $(REGISTRY_NAME)/$@ .
 	cd $(IMAGES_DIR)/$@ && $(DOCKER) tag $(REGISTRY_NAME)/$@:latest $(REGISTRY_NAME)/$@:$(DSPARK_VERSION)
 
-up:
-ifndef HOST_IP
-	$(error HOST_IP is not set)
-endif
-	cd $(COMPOSE_DIR) && $(DOCKER_COMPOSE) up
-
-down:
-	cd $(COMPOSE_DIR) && $(DOCKER_COMPOSE) down
-
 clean:
 	./scripts/cleanup.sh
-
-distclean: down clean
-	sudo rm -rf /opt/log /opt/run
-

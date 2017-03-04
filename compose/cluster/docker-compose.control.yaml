@@ -1,0 +1,41 @@
+version: '2'
+
+services:
+    zookeeper:
+        image: zookeeper:3.4
+        restart: always
+        container_name: zookeeper
+        hostname: zookeeper
+        ports:
+            - 2181:2181
+            - 2888:2888
+            - 3888:3888
+        environment:
+            ZOO_MY_ID: $ZOO_MY_ID
+            ZOO_SERVERS: $ZOO_SERVERS
+        volumes:
+            - /opt/log/zookeeper:/datalog
+            - /opt/run/zookeeper:/data
+
+    master-mesos:
+        image: mangalaman93/mesos:latest
+        command: mesos-master --no-hostname_lookup
+        restart: always
+        container_name: master-mesos
+        hostname: master-mesos
+        ports:
+            - 5050:5050
+        environment:
+            MESOS_PORT: 5050
+            MESOS_ADVERTISE_PORT: 5050
+            MESOS_ADVERTISE_IP: $HOST_PUBLIC_IP
+            MESOS_ZK: $ZK_CLUSTER/mesos
+            MESOS_QUORUM: $MESOS_QUORUM
+            MESOS_REGISTRY: in_memory
+            MESOS_LOG_DIR: /var/log/mesos
+            MESOS_WORK_DIR: /var/run/mesos
+        volumes:
+            - /opt/log/master-mesos:/var/log/mesos
+            - /opt/run/master-mesos:/var/run/mesos
+        depends_on:
+            - zookeeper

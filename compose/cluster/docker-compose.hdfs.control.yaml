@@ -1,0 +1,23 @@
+version: '2'
+
+services:
+    # Ports reference https://ambari.apache.org/1.2.3/installing-hadoop-using-ambari/content/reference_chap2_1.html
+    namenode:
+        image: mangalaman93/hdfs:2.7.3
+        command: hdfs --config /etc/hadoop namenode
+        restart: always
+        container_name: namenode
+        hostname: namenode
+        ports:
+            - 9000:9000
+            - 50070:50070
+        environment:
+            CORE_CONF_fs_defaultFS: hdfs://$NAMENODE_IP:9000
+            HDFS_CONF_dfs_namenode_name_dir: /hadoop/dfs/name
+            HDFS_CONF_dfs_namenode_http___address: 0.0.0.0:50070
+            HDFS_CONF_dfs_namenode_rpc___address: 0.0.0.0:9000
+            HDFS_CONF_dfs_namenode_datanode_registration_ip___hostname___check: "false"
+            CLUSTER_NAME: cluster_hdfs
+        volumes:
+            - /opt/run/namenode:/hadoop/dfs/name
+            - /opt/log/namenode:/opt/hadoop/logs

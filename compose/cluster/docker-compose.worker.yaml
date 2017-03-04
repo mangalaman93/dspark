@@ -1,0 +1,38 @@
+version: '2'
+
+services:
+    slave-mesos:
+        image: mangalaman93/mesos:latest
+        command: mesos-slave --launcher=posix --no-hostname_lookup
+        privileged: true
+        restart: always
+        container_name: slave-mesos
+        network_mode: host
+        environment:
+            MESOS_PORT: 5051
+            MESOS_ADVERTISE_IP: $HOST_PUBLIC_IP
+            MESOS_IP: $HOST_IP
+            MESOS_MASTER: $ZK_CLUSTER/mesos
+            MESOS_SWITCH_USER: 0
+            MESOS_CONTAINERIZERS: docker
+            MESOS_LOG_DIR: /var/log/mesos
+            MESOS_WORK_DIR: /var/run/mesos
+            LD_LIBRARY_PATH: /usr/lib64
+        volumes:
+            - /opt/log/slave-mesos:/var/log/mesos
+            - /opt/run/slave-mesos:/var/run/mesos
+            - /var/run/docker.sock:/var/run/docker.sock
+            - /cgroup:/cgroup:ro
+            - /sys:/sys:ro
+            - /usr/bin/docker:/usr/local/bin/docker:ro
+
+    shuffle:
+        image: mangalaman93/shuffle:2.1.0
+        restart: always
+        container_name: shuffle
+        network_mode: host
+        environment:
+            MESOS_MASTER: $ZK_CLUSTER/mesos
+            SPARK_SHUFFLE_SERVICE_PORT: 7337
+        volumes:
+            - /opt/run/tmp:/opt/spark/tmp

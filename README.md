@@ -16,7 +16,7 @@ docker run --net=compose_default --rm -it -p 4040:4040 -p 4042:4042 --name=dspar
 
 ## Add a file to HDFS
 ```
-docker run --rm -it -e HOST_IP=$HOST_IP  --net=compose_default mangalaman93/hdfs bash
+docker run --rm -it -e HOST_IP=$HOST_IP --net=compose_default mangalaman93/hdfs:2.7.3 bash
 hdfs dfs -fs=hdfs://$HOST_IP:9000 -put /anaconda-post.log /inputfile
 ```
 
